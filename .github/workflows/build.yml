@@ -1,0 +1,75 @@
+name: Tpak-NDS-Sync CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+            
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        cache: 'maven'  
+    - name: Build and test project with Maven
+      run: mvn -B package --file pom.xml
+    
+  publish-jar:
+    runs-on: ubuntu-latest
+    needs: [build-and-test]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      - name: Package with Maven
+        run: mvn -B package --file pom.xml -DskipTests
+      - name: Rename artifact
+        run: mv target/tpak-nds-sync*.jar target/tpak-nds-sync.jar 
+      - name: Upload artifact  
+        uses: actions/upload-artifact@v3
+        with:
+          name: tpak-nds-sync.jar
+          path: target/tpak-nds-sync.jar
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [publish-jar]
+    steps:
+    - name: Get Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: tpak-nds-sync.jar
+        path: .
+    - name: Deploy Jar to webserver
+      run: |
+        sudo apt update
+        sudo apt install lftp -y
+        lftp ${{ secrets.FTP_HOST }} -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} -e "put -O / $(pwd)/tpak-nds-sync.jar; bye"
+
+  update-version-info:
+    runs-on: ubuntu-latest
+    needs: [publish-jar]
+    steps:
+    - name: Get Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: tpak-nds-sync.jar
+        path: .
+    - name: Update version info file on webserver
+      run: |
+        unzip "$(pwd)/tpak-nds-sync.jar"
+        echo "{\"version\": \"$(printf '%x\n' $(date -d "$(<./version.txt)" +"%s"))\",\"link\":\"https://zsolv.ch/tpak-nds-sync/tpak-nds-sync.jar\"}" > version.json
+        sudo apt update
+        sudo apt install lftp -y
+        lftp ${{ secrets.FTP_HOST }} -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} -e "put -O / version.json; bye"
