@@ -30,19 +30,19 @@
     <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-java</artifactId>
-        <version>4.7.2</version>
+        <version>4.9.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-chrome-driver -->
     <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
         <artifactId>selenium-chrome-driver</artifactId>
-        <version>4.7.2</version>
+        <version>4.9.1</version>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.json/json -->
     <dependency>
         <groupId>org.json</groupId>
         <artifactId>json</artifactId>
-        <version>20220924</version>
+        <version>20230227</version>
     </dependency>
 
   </dependencies>
