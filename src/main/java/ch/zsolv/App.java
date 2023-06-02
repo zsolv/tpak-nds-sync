@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import ch.zsolv.GUI.GUI;
 import ch.zsolv.GUI.screens.NDSControls;
 import ch.zsolv.GUI.screens.TpakCredentials;
+import ch.zsolv.NDS.Nds;
 
 /**
  * Main Class, started
@@ -27,6 +28,9 @@ public class App {
 
         // Ask for tpack credentials
         gui.changeTo(new TpakCredentials());
+
+        // Load GUI
+        Nds.getInstance();
 
     }
 
