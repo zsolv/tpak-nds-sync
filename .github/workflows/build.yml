@@ -45,6 +45,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [publish-jar]
+    if: ${{ github.ref == 'refs/heads/main' }}
     steps:
     - name: Get Artifact
       uses: actions/download-artifact@v3
@@ -60,6 +61,7 @@ jobs:
   update-version-info:
     runs-on: ubuntu-latest
     needs: [publish-jar]
+    if: ${{ github.ref == 'refs/heads/main' }}
     steps:
     - name: Get Artifact
       uses: actions/download-artifact@v3
