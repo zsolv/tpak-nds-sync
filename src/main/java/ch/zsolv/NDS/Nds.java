@@ -37,6 +37,9 @@ public class Nds {
         }
         return instance;
     }
+    public WebDriver getDriver(){
+        return driver;
+    }
 
     /**
      * To close chrome on destroy

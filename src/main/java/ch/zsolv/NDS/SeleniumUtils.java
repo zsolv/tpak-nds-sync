@@ -1,11 +1,16 @@
 package ch.zsolv.NDS;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +19,30 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SeleniumUtils {
+
+    public static void debug(WebDriver driver, File f){
+        JavascriptExecutor je = (JavascriptExecutor) driver;
+        Object o = je.executeScript("return document.body.innerHTML;");
+        if (o instanceof String){
+            try{
+                BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+                writer.write((String) o);
+                writer.close();
+            }catch(IOException e){
+                System.err.println(e);
+                e.printStackTrace();
+            }
+        }else{
+            try{
+                BufferedWriter writer = new BufferedWriter(new FileWriter(f));
+                writer.write(o.toString());
+                writer.close();
+            }catch(IOException e){
+                System.err.println(e);
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Try to get a webelement when it is loaded by a css selector

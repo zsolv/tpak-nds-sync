@@ -1,22 +1,40 @@
 package ch.zsolv.GUI.screens;
 
-import ch.zsolv.Config;
-import ch.zsolv.StateTransmitter;
-import ch.zsolv.Tpak;
-import ch.zsolv.GUI.GUIPanel;
-import ch.zsolv.NDS.Nds;
-
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import javax.swing.*;
+import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+
+import ch.zsolv.Config;
+import ch.zsolv.StateTransmitter;
+import ch.zsolv.Tpak;
+import ch.zsolv.GUI.GUIPanel;
+import ch.zsolv.NDS.Nds;
+import ch.zsolv.NDS.SeleniumUtils;
 
 public class NDSControls extends GUIPanel {
 
@@ -41,6 +59,35 @@ public class NDSControls extends GUIPanel {
         logArea.setBounds(25 ,300,430,320);
         this.add(logArea);
 
+        // Add bug
+        JButton debugButton = new JButton();
+        try {
+            BufferedImage icon = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = icon.createGraphics();
+            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);   
+            g2.drawImage(ImageIO.read(this.getClass().getClassLoader().getResource("bug.png")), 0, 0, 20, 20, null);
+            g2.dispose();
+            debugButton.setOpaque(true);
+            debugButton.setContentAreaFilled(false);
+            debugButton.setBorderPainted(false);
+            debugButton.setIcon(new ImageIcon(icon));
+        } catch (IOException e) {
+            debugButton.setText("");
+        }
+       
+        debugButton.setBounds(450, 10, 20, 20);
+        debugButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                JFileChooser fileChooser = new JFileChooser();
+                if (fileChooser.showSaveDialog(debugButton) == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    SeleniumUtils.debug(Nds.getInstance().getDriver(), file);
+                }
+            }
+        });
+        this.add(debugButton);
 
         // Set coach controls
         ButtonGroup coachConfigGroup = new ButtonGroup();
