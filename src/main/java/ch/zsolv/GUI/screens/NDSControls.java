@@ -38,7 +38,7 @@ public class NDSControls extends GUIPanel {
         // Set log area
         logArea = new JTextArea();
         logArea.setEditable(false);
-        logArea.setBounds(25 ,275,430,320);
+        logArea.setBounds(25 ,300,430,320);
         this.add(logArea);
 
 
@@ -82,10 +82,50 @@ public class NDSControls extends GUIPanel {
         this.add(coachAllWhenEmpty);
         this.add(coachNothing);
 
+        // Set touch athlete controls
+        ButtonGroup athleteTouchConfigGroup = new ButtonGroup();
+        JRadioButton athleteTouchYes = new JRadioButton();
+        JRadioButton athleteTouchNo = new JRadioButton();
+        JLabel athleteTouchConfigLabel = new JLabel();
+        athleteTouchConfigLabel.setText("What to do with already set athletes?");
+        athleteTouchYes.setText("Add & Remove all attendance according to tpak");
+        athleteTouchNo.setText("Just add attendance according to tpak");
+        athleteTouchYes.setSelected(true);
+        athleteTouchConfigGroup.add(athleteTouchYes);
+        athleteTouchConfigGroup.add(athleteTouchNo);
+        athleteTouchConfigLabel.setBounds(25,175,400,20);
+        athleteTouchYes.setBounds(40,200,400,20);
+        athleteTouchNo.setBounds(40,225,400,20);
+
+        athleteTouchYes.addItemListener(new ItemListener(){
+            @Override
+            public void itemStateChanged(ItemEvent arg0) {
+               if (arg0.getStateChange() == 1){
+                Config.setTouchEnteredAthletes(true);
+               }
+                
+            }
+            
+        });
+        athleteTouchNo.addItemListener(new ItemListener(){
+            @Override
+            public void itemStateChanged(ItemEvent arg0) {
+               if (arg0.getStateChange() == 1){
+                Config.setTouchEnteredAthletes(false);
+               }
+                
+            }
+            
+        });
+
+        this.add(athleteTouchConfigLabel);
+        this.add(athleteTouchYes);
+        this.add(athleteTouchNo);
+
         // Check access
         JButton checkAccess = new JButton();
         checkAccess.setText("Athletes not given you access");
-        checkAccess.setBounds(25,190,430,25);
+        checkAccess.setBounds(25,250,430,25);
         checkAccess.addActionListener(new ActionListener(){
 
             @Override
@@ -119,9 +159,9 @@ public class NDSControls extends GUIPanel {
         runSync.b = false;
          
         ndsStartControlButton.setText("Start Sync");
-        ndsStartControlButton.setBounds(25,225, 430, 25);
+        ndsStartControlButton.setBounds(25,275, 430, 25);
         ndsStopControlButton.setText("Stop Sync");
-        ndsStopControlButton.setBounds(25,225, 430, 25);
+        ndsStopControlButton.setBounds(25,275, 430, 25);
         ndsStartControlButton.addActionListener(new ActionListener(){
 
             @Override

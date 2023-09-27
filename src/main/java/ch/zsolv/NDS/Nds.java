@@ -179,7 +179,7 @@ public class Nds {
                         if (trained) {
                             System.out.println(athletes.get(j).firstname+" "+athletes.get(j).lastname +" has trained on "+new SimpleDateFormat("d.M.yyyy").format(date));
                         }
-                        if (trained != checked){
+                        if (trained != checked && (trained || Config.getTouchEnteredAthletes())){
                             SeleniumUtils.elementScrollAndClick(driver, checkBox);
                         }
                     }
