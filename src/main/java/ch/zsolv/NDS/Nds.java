@@ -79,14 +79,25 @@ public class Nds {
     public void goToNext() throws Exception {
 
         if (SeleniumUtils.checkIfExists(driver, By.cssSelector("#mat-dialog-0"))){
+            System.out.println("Dialog opened, try clicking away");
             SeleniumUtils.elementScrollAndClick(driver, SeleniumUtils.waitAndGetElement(driver, By.cssSelector("#mat-dialog-0 > nds-ui-dialog-confirm > div.mat-dialog-actions.ng-star-inserted > button.mat-focus-indicator.mat-button.mat-raised-button.mat-button-base.mat-primary")));
+            System.out.println("Clicked Dialog away");
         }      
+        Date currentDate = getCurrentDate();
 
         WebElement next = SeleniumUtils.waitAndGetElement(driver, By.cssSelector("li.nds-ui-prev-next-nav-next.ng-star-inserted > a"));
         SeleniumUtils.elementScrollAndClick(driver, next);
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) { }
+
+        while (currentDate.equals(getCurrentDate())){
+            System.out.println("Failed to change Date, stuck with "+currentDate.toString()+"!");
+            SeleniumUtils.elementScrollAndClick(driver, SeleniumUtils.waitAndGetElement(driver, By.cssSelector("li.nds-ui-prev-next-nav-next.ng-star-inserted > a")));
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) { }
+        }
     }
 
     /**

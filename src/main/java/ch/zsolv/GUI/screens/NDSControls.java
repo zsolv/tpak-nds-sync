@@ -1,10 +1,7 @@
 package ch.zsolv.GUI.screens;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
