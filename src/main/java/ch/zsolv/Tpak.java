@@ -97,7 +97,7 @@ public class Tpak {
             return false;
         }
 
-        List<Integer> ignoreIds = Stream.of(4,6,13,40,41,73,74,75,76,77,78,79,80,123,125,126,192,193,198,199,200,217,218,200,221,222,223,224,225,381,388,613).toList();
+        List<Integer> ignoreIds = Stream.of(4,6,13,40,41,73,74,75,76,77,78,79,80,123,125,126,192,193,198,199,200,217,218,200,221,222,223,224,225,381,388,613).collect(Collectors.toList());
 
 
         // Parese response as json array

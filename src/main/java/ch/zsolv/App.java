@@ -14,6 +14,9 @@ public class App {
 
     public static void main( String[] args ) {
 
+        // For debugging print java version
+        System.out.println("Java: "+System.getProperty("java.version"));
+
         PrintStream interceptor = new LogIntercepter(System.out);
         System.setOut(interceptor);
 
