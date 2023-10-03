@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -263,7 +264,7 @@ public class Tpak {
 
             con.setDoOutput(true);
             OutputStream os = con.getOutputStream();
-            os.write(body.getBytes());
+            os.write(body.getBytes(StandardCharsets.UTF_8));
             os.flush();
             os.close();
             
