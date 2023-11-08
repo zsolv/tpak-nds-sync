@@ -6,6 +6,7 @@ import ch.zsolv.GUI.GUI;
 import ch.zsolv.GUI.screens.NDSControls;
 import ch.zsolv.GUI.screens.TpakCredentials;
 import ch.zsolv.NDS.Nds;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 /**
  * Main Class, started
@@ -22,6 +23,9 @@ public class App {
 
         // Ensure latest version is running
         UpdateCheck.ensureLatestVersion();
+
+        // Initialize Web Driver Manager
+        new Thread(() -> {WebDriverManager.chromedriver().setup();}).start();
 
         // Start Gui App
         GUI gui = GUI.getInstance();

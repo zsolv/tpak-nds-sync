@@ -156,13 +156,13 @@ public class Tpak {
         int year = LocalDate.now().getYear();
         String skiFrom = "";
         String skiTo = "";
-        if (month >= 10){
+        /*if (month >= 13){
             skiFrom = year+"-10-03";
             skiTo = (year+1)+"-03-24";
-        }else{
+        }else{*/
             skiFrom = (year-1)+"-10-03";
             skiTo = year+"-03-24";
-        }
+        /* }*/
     
         ArrayList<Athlete> athleteIds = new ArrayList<>();
 
