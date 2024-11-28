@@ -72,6 +72,18 @@ public class Nds {
         return new SimpleDateFormat("d.M.yyyy").parse(currentDateValue);
     }
 
+    public boolean isActive() throws Exception {
+
+        WebElement status = SeleniumUtils.waitAndGetElement(driver,By.cssSelector("nds-normale-ui-attendance-detail > div > div > div > dl > dd:nth-child(16)"));
+        switch(status.getText()){
+            case "Nicht durchgeführt": return false;
+            case "Anwesenheitskontrolle durchgeführt": return true;
+            case "Anwesenheitskontrolle offen": return true;
+            default: return true;
+        }
+
+    }
+
     /**
      * Try to go to the next date
      * @throws Exception
@@ -116,6 +128,21 @@ public class Nds {
         // Wait a second to give time for everything to be loaded
         Thread.sleep(1000);
 
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //                                                                                                    //
+        // Only do if event is active                                                                         //
+        //                                                                                                    //
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        try{
+            if(!isActive()){
+                return;
+            }
+        }catch(Exception e){
+            throw new Exception("Error checking status for the day: "+e.getMessage()+"\n");
+        }
+        
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
         //                                                                                                    //
         // Coaches Part                                                                                       //
@@ -131,14 +158,14 @@ public class Nds {
 
                 boolean coachesHave = coachesEl.stream().map(coach -> 
                 Arrays.asList(coach.findElement(
-                    By.className("mat-checkbox")).getAttribute("class").split(" ")
-                ).contains("mat-checkbox-checked")).anyMatch(x -> Boolean.TRUE.equals(x));           
+                    By.tagName("mat-checkbox")).getAttribute("class").split(" ")
+                ).contains("mat-mdc-checkbox-checked")).anyMatch(x -> Boolean.TRUE.equals(x));           
 
                 // Only if no coaches has a checked checkbox, check all of them
                 if (! coachesHave
                     ){
                         WebElement allCoaches = SeleniumUtils.waitAndGetElement(driver, By.cssSelector("#content > nds-normale-ui-attendance-detail > div > nds-normale-ui-activity-attendance-check > div > div:nth-child(2) > nds-ui-table > div > div.nds-ui-table > table > thead > tr"));
-                        SeleniumUtils.elementScrollAndClick(driver, allCoaches.findElement(By.className("mat-checkbox")));
+                        SeleniumUtils.elementScrollAndClick(driver, allCoaches.findElement(By.tagName("mat-checkbox")));
                     } else {
                         // Else log that we do nothing
                         System.out.println("Day: "+new SimpleDateFormat("d.M.yyyy").format(date)+" already coach entry, do nothing!");
@@ -175,8 +202,8 @@ public class Nds {
             try{
                 lastname = listEntry.findElement(By.className("mat-column-person.lastName")).getText();
                 firstname = listEntry.findElement(By.className("mat-column-person-firstName")).getText();
-                checkBox = listEntry.findElement(By.className("mat-checkbox"));
-                checked = Arrays.asList(checkBox.getAttribute("class").split(" ")).contains("mat-checkbox-checked");
+                checkBox = listEntry.findElement(By.tagName("mat-checkbox"));
+                checked = Arrays.asList(checkBox.getAttribute("class").split(" ")).contains("mat-mdc-checkbox-checked");
             }catch(Exception e){
                 throw new Exception("Error while reading athlete data ("+firstname+" "+lastname+")! --> "+e.getMessage()+"\n");
             }
