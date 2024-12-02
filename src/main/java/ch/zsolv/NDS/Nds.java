@@ -73,15 +73,18 @@ public class Nds {
     }
 
     public boolean isActive() throws Exception {
-
-        WebElement status = SeleniumUtils.waitAndGetElement(driver,By.cssSelector("nds-normale-ui-attendance-detail > div > div > div > dl > dd:nth-child(16)"));
-        switch(status.getText()){
-            case "Nicht durchgeführt": return false;
-            case "Anwesenheitskontrolle durchgeführt": return true;
-            case "Anwesenheitskontrolle offen": return true;
-            default: return true;
+        List<WebElement> status = SeleniumUtils.waitAndGetElements(driver,By.cssSelector("nds-normale-ui-attendance-detail > div > div > div > dl > dd"));
+        String lastS = "";
+        for(WebElement s:status){
+            switch(s.getText()){
+                case "Nicht durchgeführt": return false;
+                case "Anwesenheitskontrolle durchgeführt": return true;
+                case "Anwesenheitskontrolle offen": return true;
+            }
+            lastS = s.getText();
         }
-
+        System.out.println(lastS);
+        return true;
     }
 
     /**
